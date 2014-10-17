@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>BizTalkComponents.PipelineComponents.SetProperty</id>
+    <id>BizTalkComponents.HttpDisassembler</id>
     <version>1.0.0.0</version>
     <authors>Robin Hultman</authors>
     <owners>ibizsolutions</owners>
-    <projectUrl>https://github.com/ibizsolutions/BizTalkComponents.SetProperty</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Promotes a specified value to a specified property.</description>
+    <projectUrl>https://github.com/ibizsolutions/BizTalkComponents.HttpDisassembler</projectUrl>
+    <description>PipelineComponent that writes context properties to message body. Intended to be used with WebHttp binding.</description>
     <releaseNotes>Initial release.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>BizTalk</tags>
