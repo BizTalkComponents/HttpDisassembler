@@ -35,7 +35,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BizTalkComponents.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=87c265fe42e38fa5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\BizTalkComponents.Utils.1.0.4.3\lib\net40\BizTalkComponents.Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.BizTalk.Pipeline, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.BizTalk.TestTools, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft BizTalk Server 2013\Developer Tools\Microsoft.BizTalk.TestTools.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.XLANGs.BaseTypes, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Winterdom.BizTalk.PipelineTesting">
+      <HintPath>..\..\packages\Winterdom.BizTalk.PipelineTesting.1.2.1.0\lib\net45\Winterdom.BizTalk.PipelineTesting.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -50,7 +65,18 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="HttpDisassemblerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SchemaMock.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Src\HttpDisassembler\BizTalkComponents.PipelineComponents.HttpDisassembler.csproj">
+      <Project>{4a6c8864-b06f-455e-a375-51f658673a72}</Project>
+      <Name>BizTalkComponents.PipelineComponents.HttpDisassembler</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
