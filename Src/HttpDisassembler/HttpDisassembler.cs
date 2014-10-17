@@ -1,8 +1,9 @@
-﻿using System;
+﻿using System.Collections;
 using System.IO;
 using System.Text;
 using System.Xml;
 using BizTalkComponents.Utils.ContextPropertyHelpers;
+using BizTalkComponents.Utils.PropertyBagHelpers;
 using Microsoft.BizTalk.Component.Interop;
 using Microsoft.BizTalk.Message.Interop;
 using Microsoft.XLANGs.RuntimeTypes;
@@ -14,19 +15,26 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
     [ComponentCategory(CategoryTypes.CATID_DisassemblingParser)]
     public partial class HttpDisassembler : IBaseComponent, IPersistPropertyBag, IComponentUI, IDisassemblerComponent
     {
+        private const string DocumentSpecNamePropertyName = "DocumentSpecName";
+        private readonly Queue _outputQueue = new Queue();
+
+        public string DocumentSpecName { get; set; }
+
         public void Load(IPropertyBag propertyBag, int errorLog)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(DocumentSpecName))
+            {
+                DocumentSpecName = PropertyBagHelper.ToStringOrDefault(PropertyBagHelper.ReadPropertyBag(propertyBag, DocumentSpecNamePropertyName), string.Empty);
+            }
         }
 
         public void Save(IPropertyBag propertyBag, bool clearDirty, bool saveAllProperties)
         {
-            throw new NotImplementedException();
+            PropertyBagHelper.WritePropertyBag(propertyBag, DocumentSpecNamePropertyName, DocumentSpecName);
         }
         
         public void Disassemble(IPipelineContext pContext, IBaseMessage pInMsg)
         {
-
             //Get a reference to the BizTalk schema.
             var documentSpec = (DocumentSpec)pContext.GetDocumentSpecByName(DocumentSpecName);
 
@@ -69,7 +77,12 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
 
         public IBaseMessage GetNext(IPipelineContext pContext)
         {
-            throw new NotImplementedException();
+            if (_outputQueue.Count > 0)
+            {
+                return (IBaseMessage)_outputQueue.Dequeue();
+            }
+
+            return null;
         }
     }
 }
