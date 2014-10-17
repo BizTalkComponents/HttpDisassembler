@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizTalkComponents.PipelineComponents.HttpDisassembler", "Src\HttpDisassembler\BizTalkComponents.PipelineComponents.HttpDisassembler.csproj", "{4A6C8864-B06F-455E-A375-51F658673A72}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizTalkComponents.HttpDisassembler.Tests.UnitTests", "Tests\UnitTests\BizTalkComponents.HttpDisassembler.Tests.UnitTests.csproj", "{C52BFE1D-5760-4F69-BA03-43E34CA4F837}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{4A6C8864-B06F-455E-A375-51F658673A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A6C8864-B06F-455E-A375-51F658673A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A6C8864-B06F-455E-A375-51F658673A72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C52BFE1D-5760-4F69-BA03-43E34CA4F837}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C52BFE1D-5760-4F69-BA03-43E34CA4F837}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C52BFE1D-5760-4F69-BA03-43E34CA4F837}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C52BFE1D-5760-4F69-BA03-43E34CA4F837}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
