@@ -2,11 +2,11 @@
 using System.IO;
 using System.Text;
 using System.Xml;
-using BizTalkComponents.Utils.ContextPropertyHelpers;
-using BizTalkComponents.Utils.PropertyBagHelpers;
+using BizTalkComponents.Utils.ContextExtensions;
 using Microsoft.BizTalk.Component.Interop;
 using Microsoft.BizTalk.Message.Interop;
 using Microsoft.XLANGs.RuntimeTypes;
+using BizTalkComponents.Utils;
 
 namespace BizTalkComponents.PipelineComponents.HttpDisassembler
 {
@@ -52,11 +52,11 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
             {
                 var annotation = (IPropertyAnnotation)annotations.Current;
                 var node = doc.SelectSingleNode(annotation.XPath);
-                string propertyValue;
+                object propertyValue;
 
                 if (pInMsg.Context.TryRead(new ContextProperty(annotation.Name, annotation.Namespace),out propertyValue))
                 {
-                    node.InnerText = propertyValue;
+                    node.InnerText = propertyValue.ToString();
                 }
             }
 

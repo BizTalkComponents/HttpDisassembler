@@ -38,10 +38,6 @@
     <AssemblyOriginatorKeyFile>BizTalkComponents.HttpDisassembler.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BizTalkComponents.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=87c265fe42e38fa5, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\BizTalkComponents.Utils.1.0.4.3\lib\net40\BizTalkComponents.Utils.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.BizTalk.Pipeline, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Windows\assembly\GAC_MSIL\Microsoft.BizTalk.Pipeline\3.0.1.0__31bf3856ad364e35\Microsoft.BizTalk.Pipeline.dll</HintPath>
@@ -56,6 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BiztalkComponents.Utils\ContextExtensions.cs" />
+    <Compile Include="BiztalkComponents.Utils\ContextProperties.cs" />
+    <Compile Include="BiztalkComponents.Utils\PropertyBagHelper.cs" />
     <Compile Include="HttpDisassembler.Component.cs" />
     <Compile Include="HttpDisassembler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
