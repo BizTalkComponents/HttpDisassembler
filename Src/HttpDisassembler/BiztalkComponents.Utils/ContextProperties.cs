@@ -17,6 +17,18 @@
 
         public const string RouteDirectToTP =
             "http://schemas.microsoft.com/BizTalk/2003/system-properties#RouteDirectToTP";
+
+        public const string EpmRRCorrelationToken =
+            "http://schemas.microsoft.com/BizTalk/2003/system-properties#EpmRRCorrelationToken";
+
+        public const string CorrelationToken =
+           "http://schemas.microsoft.com/BizTalk/2003/system-properties#CorrelationToken";
+
+        public const string IsRequestResponse =
+           "http://schemas.microsoft.com/BizTalk/2003/system-properties#IsRequestResponse";
+
+        public const string ReqRespTransmitPipelineID =
+           "http://schemas.microsoft.com/BizTalk/2003/system-properties#ReqRespTransmitPipelineID";
     }
 
     public class WCFProperties
