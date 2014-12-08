@@ -2,7 +2,6 @@
 using System.IO;
 using System.Text;
 using System.Xml;
-using BizTalkComponents.Utils.ContextExtensions;
 using Microsoft.BizTalk.Component.Interop;
 using Microsoft.BizTalk.Message.Interop;
 using Microsoft.XLANGs.RuntimeTypes;
