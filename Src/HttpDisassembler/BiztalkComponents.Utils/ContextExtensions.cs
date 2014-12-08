@@ -1,22 +1,59 @@
 ﻿using System;
 using Microsoft.BizTalk.Message.Interop;
 
-namespace BizTalkComponents.Utils.ContextExtensions
+namespace BizTalkComponents.Utils
 {
     public static class ContextExtensions
     {
         public static bool TryRead(this IBaseMessageContext ctx ,ContextProperty property, out object val)
         {
+            if (property == null)
+            {
+                throw new ArgumentNullException("property");
+            }
+
             return ((val = ctx.Read(property.PropertyName, property.PropertyNamespace)) != null);
+        }
+
+        public static bool TryRead(this IBaseMessageContext ctx, ContextProperty property, out string val)
+        {
+            if (property == null)
+            {
+                throw new ArgumentNullException("property");
+            }
+            
+            val = ctx.Read(property.PropertyName, property.PropertyNamespace) as string;
+
+            return !string.IsNullOrWhiteSpace(val);
         }
 
         public static void Promote(this IBaseMessageContext ctx, ContextProperty property, object val)
         {
+            if (property == null)
+            {
+                throw new ArgumentNullException("property");
+            }
+
+            if (val == null)
+            {
+                throw new ArgumentNullException("val");
+            }
+
             ctx.Promote(property.PropertyName,property.PropertyNamespace,val);
         }
 
         public static void Write(this IBaseMessageContext ctx, ContextProperty property, object val)
         {
+            if (property == null)
+            {
+                throw new ArgumentNullException("property");
+            }
+
+            if (val == null)
+            {
+                throw new ArgumentNullException("val");
+            }
+
             ctx.Write(property.PropertyName, property.PropertyNamespace,val);
         }
 
@@ -34,55 +71,32 @@ namespace BizTalkComponents.Utils.ContextExtensions
 
             object sourceValue;
 
-            if (ctx.TryRead(source, out sourceValue))
+            if (!ctx.TryRead(source, out sourceValue))
             {
                 throw new InvalidOperationException("Could not find the specified source property in BizTalk context.");
             }
 
             ctx.Promote(destination, sourceValue);
         }
-    }
 
-    public class ContextProperty
-    {
-        public ContextProperty(string propertyName, string propertyNamespace)
+        public static bool IsPromoted(this IBaseMessageContext ctx, ContextProperty property)
         {
-            if (string.IsNullOrEmpty(propertyName))
+            if (property == null)
             {
-                throw new ArgumentNullException("propertyName");
+                throw new ArgumentNullException("property");
             }
-
-            if (string.IsNullOrEmpty(propertyNamespace))
-            {
-                throw new ArgumentNullException("propertyNamespace");
-            }
-
-            PropertyName = propertyName;
-            PropertyNamespace = propertyNamespace;
+            
+            return ctx.IsPromoted(property.PropertyName, property.PropertyNamespace);
         }
 
-        public ContextProperty(string property)
+        public static object Read(this IBaseMessageContext ctx, ContextProperty property)
         {
-            if (string.IsNullOrEmpty(property))
+            if (property == null)
             {
                 throw new ArgumentNullException("property");
             }
 
-            if (!property.Contains("#"))
-            {
-                throw new ArgumentException("The property path {0} is not valid", property);
-            }
-
-            PropertyNamespace = property.Split('#')[0];
-            PropertyName = property.Split('#')[1];
-        }
-
-        public string PropertyName { get; private set; }
-        public string PropertyNamespace { get; private set; }
-
-        public string ToPropertyString()
-        {
-            return string.Format("{0}#{1}", PropertyNamespace, PropertyName);
+            return ctx.Read(property.PropertyName, property.PropertyNamespace);
         }
     }
 }

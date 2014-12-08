@@ -44,6 +44,7 @@
     </Reference>
     <Reference Include="Microsoft.XLANGs.RuntimeTypes, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -54,7 +55,10 @@
   <ItemGroup>
     <Compile Include="BiztalkComponents.Utils\ContextExtensions.cs" />
     <Compile Include="BiztalkComponents.Utils\ContextProperties.cs" />
+    <Compile Include="BiztalkComponents.Utils\ContextProperty.cs" />
     <Compile Include="BiztalkComponents.Utils\PropertyBagHelper.cs" />
+    <Compile Include="BiztalkComponents.Utils\RequiredRuntimeAttribute.cs" />
+    <Compile Include="BiztalkComponents.Utils\ValidationHelper.cs" />
     <Compile Include="HttpDisassembler.Component.cs" />
     <Compile Include="HttpDisassembler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
