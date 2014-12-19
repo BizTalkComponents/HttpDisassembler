@@ -2,11 +2,10 @@
 <package >
   <metadata>
     <id>BizTalkComponents.PipelineComponents.HttpDisassembler</id>
-    <version>1.0.0.1</version>
+    <version>1.0.0.2</version>
     <authors>Robin Hultman</authors>
-    <owners>ibizsolutions</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <projectUrl>https://github.com/ibizsolutions/BizTalkComponents.HttpDisassembler</projectUrl>
+    <projectUrl>https://github.com/BizTalkComponents/HttpDisassembler</projectUrl>
     <description>PipelineComponent that writes context properties to message body. Intended to be used with WebHttp binding.</description>
     <releaseNotes>Initial release.</releaseNotes>
     <copyright>Copyright 2014</copyright>
