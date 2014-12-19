@@ -53,6 +53,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BiztalkComponents.Utils\ContextExtensions.cs" />
+    <Compile Include="BiztalkComponents.Utils\ContextProperties.cs" />
+    <Compile Include="BiztalkComponents.Utils\ContextProperty.cs" />
+    <Compile Include="BiztalkComponents.Utils\PropertyBagHelper.cs" />
+    <Compile Include="BiztalkComponents.Utils\RequiredRuntimeAttribute.cs" />
+    <Compile Include="BiztalkComponents.Utils\ValidationHelper.cs" />
     <Compile Include="HttpDisassembler.Component.cs" />
     <Compile Include="HttpDisassembler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

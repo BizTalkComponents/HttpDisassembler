@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -17,23 +20,20 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
         private const string DocumentSpecNamePropertyName = "DocumentSpecName";
         private readonly Queue _outputQueue = new Queue();
 
+        [RequiredRuntime]
+        [DisplayName("DocumentSpecName")]
+        [Description("DocumentSpec name of the schema to create an instance from.")]
         public string DocumentSpecName { get; set; }
 
-        public void Load(IPropertyBag propertyBag, int errorLog)
-        {
-            if (string.IsNullOrEmpty(DocumentSpecName))
-            {
-                DocumentSpecName = PropertyBagHelper.ToStringOrDefault(PropertyBagHelper.ReadPropertyBag(propertyBag, DocumentSpecNamePropertyName), string.Empty);
-            }
-        }
-
-        public void Save(IPropertyBag propertyBag, bool clearDirty, bool saveAllProperties)
-        {
-            PropertyBagHelper.WritePropertyBag(propertyBag, DocumentSpecNamePropertyName, DocumentSpecName);
-        }
-        
         public void Disassemble(IPipelineContext pContext, IBaseMessage pInMsg)
         {
+            string errorMessage;
+
+            if (!Validate(out errorMessage))
+            {
+                throw new ArgumentException(errorMessage);
+            }
+
             //Get a reference to the BizTalk schema.
             var documentSpec = (DocumentSpec)pContext.GetDocumentSpecByName(DocumentSpecName);
 
@@ -53,7 +53,7 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
                 var node = doc.SelectSingleNode(annotation.XPath);
                 object propertyValue;
 
-                if (pInMsg.Context.TryRead(new ContextProperty(annotation.Name, annotation.Namespace),out propertyValue))
+                if (pInMsg.Context.TryRead(new ContextProperty(annotation.Name, annotation.Namespace), out propertyValue))
                 {
                     node.InnerText = propertyValue.ToString();
                 }
@@ -72,6 +72,16 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
 
             _outputQueue.Enqueue(outMsg);
 
+        }
+
+        public void Load(IPropertyBag propertyBag, int errorLog)
+        {
+            DocumentSpecName = PropertyBagHelper.ToStringOrDefault(PropertyBagHelper.ReadPropertyBag(propertyBag, DocumentSpecNamePropertyName), string.Empty);
+        }
+
+        public void Save(IPropertyBag propertyBag, bool clearDirty, bool saveAllProperties)
+        {
+            PropertyBagHelper.WritePropertyBag(propertyBag, DocumentSpecNamePropertyName, DocumentSpecName);
         }
 
         public IBaseMessage GetNext(IPipelineContext pContext)
