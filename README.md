@@ -1,2 +1,1 @@
-BizTalkComponents.HttpDisassembler
-==================================
+[![Build status](https://ci.appveyor.com/api/projects/status/github/BizTalkComponents/HttpDisassembler?branch=master)](https://ci.appveyor.com/api/projects/status/github/BizTalkComponents/HttpDisassembler/branch/master)
