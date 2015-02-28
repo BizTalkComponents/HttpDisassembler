@@ -17,7 +17,7 @@
 
   <Target Name="GenerateMsi" DependsOnTargets="GetVersion">
     <MsiTask
-			FileName="BizTalkComponents.PipelineComponents.CopyContextProperty_%(Info.AssemblyInformationalVersion).msi"
+			FileName="BizTalkComponents.PipelineComponents.HttpDisassembler%(Info.AssemblyInformationalVersion).msi"
 			DestinationPath="$(DestinationPath)"
 			ApplicationName="$(ApplicationName)"
 			SourceLocation="C:\%(Info.AssemblyInformationalVersion)"
