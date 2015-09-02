@@ -8,3 +8,6 @@ http://blog.ibiz-solutions.se/integration/exposing-a-rest-get-endpoint-using-biz
 | Parameter      | Description                                               | Type | Validation|
 | ---------------|-----------------------------------------------------------|------|-----------|
 |DocumentSpecName|DocumentSpec name of the schema to create an instance from.|String|Required|
+
+## Remarks ##
+If the DocumentSpecName is not set an ArgumentException will be thrown. If the specified schema does not exist in GAC an exception will be thrown.
