@@ -9,6 +9,7 @@ using Microsoft.BizTalk.Component.Interop;
 using Microsoft.BizTalk.Message.Interop;
 using Microsoft.XLANGs.RuntimeTypes;
 using BizTalkComponents.Utils;
+using BizTalkComponents.Utilities.ComponentInstrumentation;
 
 namespace BizTalkComponents.PipelineComponents.HttpDisassembler
 {
@@ -19,6 +20,12 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
     {
         private const string DocumentSpecNamePropertyName = "DocumentSpecName";
         private readonly Queue _outputQueue = new Queue();
+        private readonly ComponentInstrumentationHelper _instrumentationHelper;
+
+        public HttpDisassembler()
+        {
+            _instrumentationHelper = new ComponentInstrumentationHelper(new AppInsightsComponentTracker());
+        }
 
         [RequiredRuntime]
         [DisplayName("DocumentSpecName")]
@@ -27,11 +34,15 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
 
         public void Disassemble(IPipelineContext pContext, IBaseMessage pInMsg)
         {
+            _instrumentationHelper.TrackComponentStart(pContext);
+
             string errorMessage;
 
             if (!Validate(out errorMessage))
             {
-                throw new ArgumentException(errorMessage);
+                var ex = new ArgumentException(errorMessage);
+                _instrumentationHelper.TrackComponentException(ex);
+                throw ex;
             }
 
             //Get a reference to the BizTalk schema.
@@ -71,6 +82,7 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
             outMsg.Context.Promote(new ContextProperty(SystemProperties.SchemaStrongName), documentSpec.DocSpecStrongName);
 
             _outputQueue.Enqueue(outMsg);
+            _instrumentationHelper.TrackComponentEnd();
 
         }
 
