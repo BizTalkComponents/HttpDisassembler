@@ -9,6 +9,7 @@ using Microsoft.BizTalk.Component.Interop;
 using Microsoft.BizTalk.Message.Interop;
 using Microsoft.XLANGs.RuntimeTypes;
 using BizTalkComponents.Utils;
+using Microsoft.BizTalk.Streaming;
 
 namespace BizTalkComponents.PipelineComponents.HttpDisassembler
 {
@@ -33,6 +34,11 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
             {
                 throw new ArgumentException(errorMessage);
             }
+
+            var data = pInMsg.BodyPart.GetOriginalDataStream();
+
+            //Determine of the request body has any data. GET request will not have any body.
+            var hasData = HasData(data);
 
             //Get a reference to the BizTalk schema.
             var documentSpec = (DocumentSpec)pContext.GetDocumentSpecByName(DocumentSpecName);
@@ -64,14 +70,28 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
             ms.Seek(0, SeekOrigin.Begin);
 
             var outMsg = pInMsg;
-            outMsg.BodyPart.Data = ms;
 
-            //Promote message type and SchemaStrongName
-            outMsg.Context.Promote(new ContextProperty(SystemProperties.MessageType), documentSpec.DocType);
-            outMsg.Context.Promote(new ContextProperty(SystemProperties.SchemaStrongName), documentSpec.DocSpecStrongName);
+            //If the request has a body it should be preserved an the query parameters should be written to it's own message part.
+            if (hasData)
+            {
+                outMsg = pInMsg;
+                outMsg.BodyPart.Data = pInMsg.BodyPart.Data;
+                outMsg.Context = PipelineUtil.CloneMessageContext(pInMsg.Context);
+                var factory = pContext.GetMessageFactory();
+                var queryPart = factory.CreateMessagePart();
+                queryPart.Data = ms;
+
+                outMsg.AddPart("querypart", queryPart, false);
+            }
+            else
+            {
+                outMsg.BodyPart.Data = ms;
+                //Promote message type and SchemaStrongName
+                outMsg.Context.Promote(new ContextProperty(SystemProperties.MessageType), documentSpec.DocType);
+                outMsg.Context.Promote(new ContextProperty(SystemProperties.SchemaStrongName), documentSpec.DocSpecStrongName);
+            }
 
             _outputQueue.Enqueue(outMsg);
-
         }
 
         public void Load(IPropertyBag propertyBag, int errorLog)
@@ -92,6 +112,24 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
             }
 
             return null;
+        }
+
+        private bool HasData(Stream data)
+        {
+            byte[] buffer= new byte[10];
+            const int bufferSize = 0x280;
+            const int thresholdSize = 0x100000;
+
+            if (!data.CanSeek || !data.CanRead)
+            {
+                data = new ReadOnlySeekableStream(data, new VirtualStream(bufferSize, thresholdSize), bufferSize);
+            }
+
+            int num = data.Read(buffer, 0, buffer.Length);
+            data.Seek(0, SeekOrigin.Begin);
+            data.Position = 0;
+
+            return num > 0;
         }
     }
 }
