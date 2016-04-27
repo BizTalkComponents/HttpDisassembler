@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -10,6 +10,7 @@ using Microsoft.BizTalk.Message.Interop;
 using Microsoft.XLANGs.RuntimeTypes;
 using BizTalkComponents.Utils;
 using BizTalkComponents.Utilities.ComponentInstrumentation;
+using System.Runtime.InteropServices;
 namespace BizTalkComponents.PipelineComponents.HttpDisassembler
 {
 
@@ -40,20 +41,26 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
 
         public void Disassemble(IPipelineContext pContext, IBaseMessage pInMsg)
         {
-            //_instrumentationHelper.TrackComponentStart(pContext);
-
             string errorMessage;
 
             if (!Validate(out errorMessage))
             {
                 var ex = new ArgumentException(errorMessage);
                 _instrumentationHelper.TrackComponentError(ex);
-                //_instrumentationHelper.TrackComponentException(ex);
                 throw ex;
             }
 
             //Get a reference to the BizTalk schema.
-            var documentSpec = (DocumentSpec)pContext.GetDocumentSpecByName(DocumentSpecName);
+            DocumentSpec documentSpec;
+            try
+            {
+                documentSpec = (DocumentSpec)pContext.GetDocumentSpecByName(DocumentSpecName);
+            }
+            catch (COMException cex)
+            {
+                _instrumentationHelper.TrackComponentError(cex);
+                throw cex;
+            }
 
             //Get a list of properties defined in the schema.
             var annotations = documentSpec.GetPropertyAnnotationEnumerator();
