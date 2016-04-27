@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BizTalkComponents.PipelineComponents.HttpDisassembler</RootNamespace>
     <AssemblyName>BizTalkComponents.PipelineComponents.HttpDisassembler</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -40,9 +40,18 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>BizTalkComponents.HttpDisassembler.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NugetRelease|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\NugetRelease\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;tracking</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BizTalkComponents.Utilities.ComponentInstrumentation">
-      <HintPath>..\..\..\ComponentInstrumentation\Src\ComponentInstrumentation\bin\Debug\BizTalkComponents.Utilities.ComponentInstrumentation.dll</HintPath>
+      <HintPath>..\..\..\..\BizTalkComponents.Utilities.ComponentInstrumentation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.BizTalk.Pipeline, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -10,9 +10,9 @@ using Microsoft.BizTalk.Message.Interop;
 using Microsoft.XLANGs.RuntimeTypes;
 using BizTalkComponents.Utils;
 using BizTalkComponents.Utilities.ComponentInstrumentation;
-
 namespace BizTalkComponents.PipelineComponents.HttpDisassembler
 {
+
     [System.Runtime.InteropServices.Guid("FE75A97A-EB7C-49AF-8778-136FA366A5F4")]
     [ComponentCategory(CategoryTypes.CATID_PipelineComponent)]
     [ComponentCategory(CategoryTypes.CATID_DisassemblingParser)]
@@ -22,11 +22,17 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
         private readonly Queue _outputQueue = new Queue();
         private readonly ComponentInstrumentationHelper _instrumentationHelper;
 
+#if tracking
         public HttpDisassembler()
         {
-            _instrumentationHelper = new ComponentInstrumentationHelper(new AppInsightsComponentTracker());
+            _instrumentationHelper = new ComponentInstrumentationHelper(new AppInsightsComponentTracker("8967ad9d-a7b0-4504-8400-e6503875a53d"), Name);
         }
-
+#else
+        public HttpDisassembler()
+        {
+            _instrumentationHelper = new ComponentInstrumentationHelper(new TraceComponentTracker(), Name);
+        }
+#endif
         [RequiredRuntime]
         [DisplayName("DocumentSpecName")]
         [Description("DocumentSpec name of the schema to create an instance from.")]
@@ -34,14 +40,15 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
 
         public void Disassemble(IPipelineContext pContext, IBaseMessage pInMsg)
         {
-            _instrumentationHelper.TrackComponentStart(pContext);
+            //_instrumentationHelper.TrackComponentStart(pContext);
 
             string errorMessage;
 
             if (!Validate(out errorMessage))
             {
                 var ex = new ArgumentException(errorMessage);
-                _instrumentationHelper.TrackComponentException(ex);
+                _instrumentationHelper.TrackComponentError(ex);
+                //_instrumentationHelper.TrackComponentException(ex);
                 throw ex;
             }
 
@@ -82,7 +89,7 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
             outMsg.Context.Promote(new ContextProperty(SystemProperties.SchemaStrongName), documentSpec.DocSpecStrongName);
 
             _outputQueue.Enqueue(outMsg);
-            _instrumentationHelper.TrackComponentEnd();
+            _instrumentationHelper.TrackComponentSuccess();
 
         }
 
