@@ -26,7 +26,7 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
 #if tracking
         public HttpDisassembler()
         {
-            _instrumentationHelper = new ComponentInstrumentationHelper(new AppInsightsComponentTracker("8967ad9d-a7b0-4504-8400-e6503875a53d"), Name);
+            _instrumentationHelper = new ComponentInstrumentationHelper(new AppInsightsComponentTracker("insert key here"), Name);
         }
 #else
         public HttpDisassembler()
