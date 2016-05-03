@@ -50,8 +50,13 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BizTalkComponents.Utilities.ComponentInstrumentation">
-      <HintPath>..\..\..\..\BizTalkComponents.Utilities.ComponentInstrumentation.dll</HintPath>
+    <Reference Include="BizTalkComponents.Utilities.ComponentInstrumentation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fc5a9041a4c00c5, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\BizTalkComponents.Utilities.ComponentInstrumentation.1.0.0-beta3\lib\net45\BizTalkComponents.Utilities.ComponentInstrumentation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.2.0.0-rc1\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.BizTalk.Pipeline, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -81,6 +86,7 @@
   <ItemGroup>
     <None Include="BizTalkComponents.HttpDisassembler.snk" />
     <None Include="BizTalkComponents.PipelineComponents.HttpDisassembler.nuspec" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
