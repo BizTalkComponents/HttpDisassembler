@@ -5,12 +5,14 @@
 	<PropertyGroup>
 		<DestinationPath>.</DestinationPath>
 		<ApplicationName>BizTalkComponents.PipelineComponents.HttpDisassembler</ApplicationName>
+    <Configuration></Configuration>
 	</PropertyGroup>
 	<ItemGroup>
-		<Resource Include="..\Src\HttpDisassembler\bin\Debug\BizTalkComponents.PipelineComponents.HttpDisassembler.dll" />
+		<Resource Include="..\Src\HttpDisassembler\bin\$(Configuration)\BizTalkComponents.PipelineComponents.HttpDisassembler.dll" />
+    <Resource Include="..\packages\Microsoft.ApplicationInsights.2.0.0-rc1\lib\net45\Microsoft.ApplicationInsights.dll" />
 	</ItemGroup>
   <Target Name="GetVersion">
-    <MSBuild.ExtensionPack.Framework.Assembly TaskAction="GetInfo" NetAssembly="..\Src\HttpDisassembler\bin\Debug\BizTalkComponents.PipelineComponents.HttpDisassembler.dll">
+    <MSBuild.ExtensionPack.Framework.Assembly TaskAction="GetInfo" NetAssembly="..\Src\HttpDisassembler\bin\$(Configuration)\BizTalkComponents.PipelineComponents.HttpDisassembler.dll">
       <Output TaskParameter="OutputItems" ItemName="Info"/>
     </MSBuild.ExtensionPack.Framework.Assembly>
   </Target>
