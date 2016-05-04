@@ -9,7 +9,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<Resource Include="..\Src\HttpDisassembler\bin\$(Configuration)\BizTalkComponents.PipelineComponents.HttpDisassembler.dll" />
-    <Resource Include="..\packages\Microsoft.ApplicationInsights.2.0.0-rc1\lib\net45\Microsoft.ApplicationInsights.dll" />
+    <Resource Include="..\packages\Microsoft.ApplicationInsights.2.0.1\lib\net45\Microsoft.ApplicationInsights.dll" />
 	</ItemGroup>
   <Target Name="GetVersion">
     <MSBuild.ExtensionPack.Framework.Assembly TaskAction="GetInfo" NetAssembly="..\Src\HttpDisassembler\bin\$(Configuration)\BizTalkComponents.PipelineComponents.HttpDisassembler.dll">
