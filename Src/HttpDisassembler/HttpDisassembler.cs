@@ -9,9 +9,11 @@ using Microsoft.BizTalk.Component.Interop;
 using Microsoft.BizTalk.Message.Interop;
 using Microsoft.XLANGs.RuntimeTypes;
 using BizTalkComponents.Utils;
-
+using BizTalkComponents.Utilities.ComponentInstrumentation;
+using System.Runtime.InteropServices;
 namespace BizTalkComponents.PipelineComponents.HttpDisassembler
 {
+
     [System.Runtime.InteropServices.Guid("FE75A97A-EB7C-49AF-8778-136FA366A5F4")]
     [ComponentCategory(CategoryTypes.CATID_PipelineComponent)]
     [ComponentCategory(CategoryTypes.CATID_DisassemblingParser)]
@@ -19,7 +21,19 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
     {
         private const string DocumentSpecNamePropertyName = "DocumentSpecName";
         private readonly Queue _outputQueue = new Queue();
+        private readonly ComponentInstrumentationHelper _instrumentationHelper;
 
+#if tracking
+        public HttpDisassembler()
+        {
+            _instrumentationHelper = new ComponentInstrumentationHelper(new AppInsightsComponentTracker("insert key here"), Name);
+        }
+#else
+        public HttpDisassembler()
+        {
+            _instrumentationHelper = new ComponentInstrumentationHelper(new TraceComponentTracker(), Name);
+        }
+#endif
         [RequiredRuntime]
         [DisplayName("DocumentSpecName")]
         [Description("DocumentSpec name of the schema to create an instance from.")]
@@ -31,11 +45,22 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
 
             if (!Validate(out errorMessage))
             {
-                throw new ArgumentException(errorMessage);
+                var ex = new ArgumentException(errorMessage);
+                _instrumentationHelper.TrackComponentError(ex);
+                throw ex;
             }
 
             //Get a reference to the BizTalk schema.
-            var documentSpec = (DocumentSpec)pContext.GetDocumentSpecByName(DocumentSpecName);
+            DocumentSpec documentSpec;
+            try
+            {
+                documentSpec = (DocumentSpec)pContext.GetDocumentSpecByName(DocumentSpecName);
+            }
+            catch (COMException cex)
+            {
+                _instrumentationHelper.TrackComponentError(cex);
+                throw cex;
+            }
 
             //Get a list of properties defined in the schema.
             var annotations = documentSpec.GetPropertyAnnotationEnumerator();
@@ -71,6 +96,7 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
             outMsg.Context.Promote(new ContextProperty(SystemProperties.SchemaStrongName), documentSpec.DocSpecStrongName);
 
             _outputQueue.Enqueue(outMsg);
+            _instrumentationHelper.TrackComponentSuccess();
 
         }
 
