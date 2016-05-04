@@ -10,7 +10,8 @@
 	<ItemGroup>
 		<Resource Include="..\Src\HttpDisassembler\bin\$(Configuration)\BizTalkComponents.PipelineComponents.HttpDisassembler.dll" />
     <Resource Include="..\packages\Microsoft.ApplicationInsights.2.0.1\lib\net45\Microsoft.ApplicationInsights.dll" />
-	</ItemGroup>
+    <Resource Include="..\packages\packages\BizTalkComponents.Utilities.ComponentInstrumentation.1.0.0\lib\net45\BizTalkComponents.Utilities.ComponentInstrumentation.1.0.0.dll" />
+  </ItemGroup>
   <Target Name="GetVersion">
     <MSBuild.ExtensionPack.Framework.Assembly TaskAction="GetInfo" NetAssembly="..\Src\HttpDisassembler\bin\$(Configuration)\BizTalkComponents.PipelineComponents.HttpDisassembler.dll">
       <Output TaskParameter="OutputItems" ItemName="Info"/>
