@@ -10,5 +10,8 @@
     <releaseNotes>Initial release.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>BizTalk</tags>
+    <dependencies>
+      <dependency id="BizTalkComponents.Utilities.ComponentInstrumentation" version="1.0" />
+    </dependencies>
   </metadata>
 </package>
