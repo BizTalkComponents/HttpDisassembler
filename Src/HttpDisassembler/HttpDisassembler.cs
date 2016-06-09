@@ -100,13 +100,13 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
             //If the request has a body it should be preserved an the query parameters should be written to it's own message part.
             if (hasData)
             {
-                string msgType = GetMessageType(MakeMarkable(pInMsg.BodyPart.Data), null);
+                string msgType = GetMessageType(MakeMarkable(pInMsg.BodyPart.Data));
 
                 outMsg = pInMsg;
                 outMsg.BodyPart.Data = pInMsg.BodyPart.Data;
-                
+
                 outMsg.Context = PipelineUtil.CloneMessageContext(pInMsg.Context);
-                outMsg.Context.Promote(new ContextProperty(SystemProperties.MessageType),msgType);
+                outMsg.Context.Promote(new ContextProperty(SystemProperties.MessageType), msgType);
                 var factory = pContext.GetMessageFactory();
                 var queryPart = factory.CreateMessagePart();
                 queryPart.Data = ms;
@@ -145,7 +145,7 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
 
             return null;
         }
-        
+
         private MarkableForwardOnlyEventingReadStream MakeMarkable(Stream stream)
         {
             MarkableForwardOnlyEventingReadStream eventingReadStream = null;
@@ -154,11 +154,11 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
             {
                 eventingReadStream = stream as MarkableForwardOnlyEventingReadStream ?? new MarkableForwardOnlyEventingReadStream(stream);
             }
-             
+
             return eventingReadStream;
         }
 
-        private string GetMessageType(MarkableForwardOnlyEventingReadStream stm, Encoding encoding)
+        private string GetMessageType(MarkableForwardOnlyEventingReadStream stm)
         {
             string msgType = null;
 
@@ -166,15 +166,9 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
             try
             {
                 XmlTextReader xmlTextReader = null;
-                if (encoding != null)
-                {
-                    xmlTextReader = new XmlTextReader(new StreamReader(stm, encoding));
-                }
-                else
-                {
-                     xmlTextReader =  new XmlTextReader((Stream)stm);
-                }
-                
+
+                xmlTextReader = new XmlTextReader((Stream)stm);
+
                 while (msgType == null)
                 {
                     if (xmlTextReader.Read())
@@ -205,7 +199,7 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
         }
         private bool HasData(Stream data)
         {
-            byte[] buffer= new byte[10];
+            byte[] buffer = new byte[10];
             const int bufferSize = 0x280;
             const int thresholdSize = 0x100000;
 
