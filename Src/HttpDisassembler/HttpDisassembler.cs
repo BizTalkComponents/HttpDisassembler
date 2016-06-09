@@ -100,9 +100,13 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
             //If the request has a body it should be preserved an the query parameters should be written to it's own message part.
             if (hasData)
             {
+                string msgType = GetMessageType(MakeMarkable(pInMsg.BodyPart.Data));
+
                 outMsg = pInMsg;
                 outMsg.BodyPart.Data = pInMsg.BodyPart.Data;
+
                 outMsg.Context = PipelineUtil.CloneMessageContext(pInMsg.Context);
+                outMsg.Context.Promote(new ContextProperty(SystemProperties.MessageType), msgType);
                 var factory = pContext.GetMessageFactory();
                 var queryPart = factory.CreateMessagePart();
                 queryPart.Data = ms;
@@ -142,9 +146,60 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
             return null;
         }
 
+        private MarkableForwardOnlyEventingReadStream MakeMarkable(Stream stream)
+        {
+            MarkableForwardOnlyEventingReadStream eventingReadStream = null;
+
+            if (stream != null)
+            {
+                eventingReadStream = stream as MarkableForwardOnlyEventingReadStream ?? new MarkableForwardOnlyEventingReadStream(stream);
+            }
+
+            return eventingReadStream;
+        }
+
+        private string GetMessageType(MarkableForwardOnlyEventingReadStream stm)
+        {
+            string msgType = null;
+
+            stm.MarkPosition();
+            try
+            {
+                XmlTextReader xmlTextReader = null;
+
+                xmlTextReader = new XmlTextReader((Stream)stm);
+
+                while (msgType == null)
+                {
+                    if (xmlTextReader.Read())
+                    {
+                        if (xmlTextReader.NodeType == XmlNodeType.Element && xmlTextReader.Depth == 0)
+                        {
+                            if (xmlTextReader.NamespaceURI == null || xmlTextReader.NamespaceURI.Length <= 0)
+                            {
+                                msgType = xmlTextReader.LocalName;
+                            }
+                            else
+                            {
+                                msgType = xmlTextReader.NamespaceURI + '#' + xmlTextReader.LocalName;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            finally
+            {
+                stm.ResetPosition();
+            }
+            return msgType;
+        }
         private bool HasData(Stream data)
         {
-            byte[] buffer= new byte[10];
+            byte[] buffer = new byte[10];
             const int bufferSize = 0x280;
             const int thresholdSize = 0x100000;
 
