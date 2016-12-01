@@ -128,7 +128,8 @@ namespace BizTalkComponents.PipelineComponents.HttpDisassembler
 
         public void Load(IPropertyBag propertyBag, int errorLog)
         {
-            DocumentSpecName = PropertyBagHelper.ToStringOrDefault(PropertyBagHelper.ReadPropertyBag(propertyBag, DocumentSpecNamePropertyName), string.Empty);
+
+            DocumentSpecName = PropertyBagHelper.ReadPropertyBag(propertyBag, DocumentSpecNamePropertyName, DocumentSpecName);
         }
 
         public void Save(IPropertyBag propertyBag, bool clearDirty, bool saveAllProperties)
